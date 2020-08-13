@@ -94,6 +94,8 @@ def point_on_polygon(point, poly):
 
 
 if __name__ == "__main__":
+    file_names = []
+    processed_files_txt = open("processed_files.txt","w+")
     directions = get_movement_directions()
     polygons = get_polygons()
     print(directions)
@@ -109,7 +111,7 @@ if __name__ == "__main__":
         if contains_image_path(line):
             number_of_files += 1
             file_name = get_image_path(line)  # cam_01/99
-            print(file_name)
+            file_names.append(file_name)
             video_name, frame_id = file_name.split("/")[0], file_name.split("/")[1]
             cam_no = int(video_name[4:6])
             for i in range(index + 1, len(lines)):
@@ -142,7 +144,6 @@ if __name__ == "__main__":
                     y_center = top_y + height / 2
                     if not point_on_polygon([x_center, y_center], polygons[cam_no]):
                         continue
-                    print(cam_no, len(directions))
                     content = video_name + " " + frame_id + " " + str(int(directions[cam_no][
                                                                               random.randint(0, len(
                                                                                   directions[cam_no]) - 1)][
@@ -151,5 +152,8 @@ if __name__ == "__main__":
                 else:
                     index = i
                     break
-
-    print("found {number_of_files}" + str(number_of_files))
+    file_names.sort()
+    print(file_names)
+    for fn in file_names:
+        processed_files_txt.write(fn+"\n")
+    print("found {number_of_files}", len(file_names))
