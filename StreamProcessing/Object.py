@@ -54,25 +54,5 @@ class Object:
 
     # compare if two objects is one
     def get_similar_score(self, other_object):
-        vote = 0
-        if self.class_name != other_object.class_name:
-            vote -=1
-        else:
-            vote +=1
-        if self.confident_score/other_object.confident_score < Object.CONFIDENT_THRESHOLD:
-            vote -=1
-        else:
-            vote +=1
         distance = MathHelper.distanceP2P(Point(self.x_center,self.y_center),Point(other_object.x_center,other_object.y_center))
-        if distance > Object.DISTANCE_SIMILAR_THRESHOLD:
-            vote -=4
-        else:
-            vote +=4
-        area1 = self.width*self.height
-        area2 = other_object.width * other_object.height
-        area_ratio = area2/(area1+0.001)
-        if area_ratio < (1-Object.AREA_BIAS_THRESHOLD) or area_ratio > (1+Object.AREA_BIAS_THRESHOLD):
-            vote -=2
-        else:
-            vote +=2
-        return vote
+        return 1/(distance+0.001)

@@ -11,10 +11,9 @@ from StreamProcessing.Polygon import Polygon
 class StreamProcessor:
     number_of_frames = 20  # correspond to 2s
 
-    def __init__(self, moving_directions, polygon):
+    def __init__(self, polygon):
         self.frames = []
         self.polygon = polygon
-        self.polygon.moving_directions = moving_directions
 
     def __add_new_frame(self, new_frame):
         self.frames.insert(0, new_frame)
@@ -26,33 +25,51 @@ class StreamProcessor:
         self.__add_new_frame(new_frame)
         movements = []
         for obj in new_frame.objects:
-            if MathHelper.is_on_polygon(Point(obj.x_center, obj.y_center), polygon=self.polygon):
+            if MathHelper.is_on_polygon(obj, polygon=self.polygon):
                 similar_objects_in_pre_frames = self.__get_similar_objects(obj)
                 direction = self.__get_direction(similar_objects_in_pre_frames)
                 movement = Movement(direction, obj)
-                movements.append(movements)
+                movements.append(movement)
         return movements
 
     def __get_similar_objects(self, obje):
+        num_of_similar_for_each_frame = 4
         similar_objects = []
         if len(self.frames) > 1:
             for frame in self.frames[1:]:
-                for obj in frame.objects:
-                    similar_score = obje.get_similar_score(obj)
-                    if len(similar_objects) <= 0:
-                        similar_objects.append(obj)
+                if len(frame.objects) > 0:
+                    for obj in frame.objects:
+                        similar_score = obje.get_similar_score(obj)
                         obj.similar_score = similar_score
+                    frame.objects.sort(key=lambda x: x.similar_score)
+                    # pick up 4 objects that are most similar to obje
+                    if len(frame.objects) > num_of_similar_for_each_frame:
+                        most_similar = self.__get_most_similar(obje, frame.objects[-num_of_similar_for_each_frame:])
                     else:
-                        for similar in similar_objects:
-                            if similar_score > similar.similar_score:
-                                similar_objects.append(obj)
-                                obj.similar_score = similar_score
-                                if len(similar_objects) > 10:
-                                    similar_objects.remove(similar)
-                                break
+                        most_similar = self.__get_most_similar(obje, frame.objects)
+                    similar_objects.append(most_similar)
+                    obje = most_similar
+
         return similar_objects
 
+    def __get_most_similar(self, obje, list_of_object):
+        weights = [0.4, 0.6]
+        obje_diagonal_line = obje.calculate_diagonal_line()
+        for obj in list_of_object:
+            diagonal_line = obj.calculate_diagonal_line()
+            obj.similar_score = weights[0] * 1 / abs(diagonal_line - obje_diagonal_line) + weights[
+                1] * obj.similar_score
+        list_of_object.sort(key=lambda x: x.similar_score)
+        highest_score = -1
+        chosen_obj = None
+        for obj in list_of_object:
+            if obj.similar_score > highest_score:
+                chosen_obj = obj
+                highest_score = obj.similar_score
+        return chosen_obj
+
     def __get_direction(self, similar_objects_in_pre_frames):
+        # TODO
         i = random.randint(0, len(self.polygon.moving_directions) - 1)
         direction = self.polygon.moving_directions[i]
         return direction

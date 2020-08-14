@@ -80,7 +80,7 @@ if __name__ == "__main__":
         points_of_polygon = JsonHelper.get_points_of_polygon(cam_json)
         directions = JsonHelper.get_movement_directions(cam_json)
         polygon = Polygon(directions,points_of_polygon)
-        processor = StreamProcessor(moving_directions=directions, polygon=polygon)
+        processor = StreamProcessor(polygon=polygon)
         # travel through all frames, get prediction for each frame
 
         index = 0
@@ -93,9 +93,6 @@ if __name__ == "__main__":
                 cam_no = int(video_name[4:6])
 
                 if cam_no != i:
-                    continue
-                if file_name in processed_files:
-                    print(file_name, "has been processed already")
                     continue
 
                 # save processing file to avoid repeat processing
@@ -111,13 +108,13 @@ if __name__ == "__main__":
                         class_name = bbox[0]
 
                         has_type = False
-                        if class_name in type1:
+                        if class_name in Object.ObjectType[1]:
                             has_type = True
-                        if class_name in type1:
+                        if class_name in Object.ObjectType[2]:
                             has_type = True
-                        if class_name in type1:
+                        if class_name in Object.ObjectType[3]:
                             has_type = True
-                        if class_name in type1:
+                        if class_name in Object.ObjectType[4]:
                             has_type = True
                         if not has_type:
                             continue
@@ -139,7 +136,7 @@ if __name__ == "__main__":
                         for movement in movements:
                             print(movement)
                             submit_file.write(
-                                video_name + " " + frame_id + " " + movement.direction.direction_id + " " + movement.obj.class_type + "\n")
+                                video_name + " " + frame_id + " " + str(movement.direction.direction_id) + " " + str(movement.obj.class_type) + "\n")
                         break
 
     processed_files_file.close()
