@@ -1,3 +1,5 @@
+from math import sqrt
+
 from StreamProcessing.Direction import Direction
 from StreamProcessing.Helpers import MathHelper
 from StreamProcessing.Point import Point
@@ -56,3 +58,6 @@ class Object:
     def get_similar_score(self, other_object):
         distance = MathHelper.distanceP2P(Point(self.x_center,self.y_center),Point(other_object.x_center,other_object.y_center))
         return 1/(distance+0.001)
+
+    def calculate_diagonal_line(self):
+        return sqrt(self.width**2+self.height**2)

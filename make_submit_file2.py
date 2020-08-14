@@ -101,8 +101,8 @@ if __name__ == "__main__":
 
                 # create new frame object and put into processor
                 frame = Frame()
-                for i in range(index + 1, len(lines)):
-                    next_line = lines[i]
+                for j in range(index + 1, len(lines)):
+                    next_line = lines[j]
                     if contains_bbox(next_line):
                         bbox = get_bbox(next_line)
                         class_name = bbox[0]
@@ -130,7 +130,7 @@ if __name__ == "__main__":
                                         y_center=y_center, width=width, height=height)
                         frame.add_object(object)
                     else:
-                        index = i
+                        index = j
                         movements = processor.process_new_frame(frame)
 
                         for movement in movements:

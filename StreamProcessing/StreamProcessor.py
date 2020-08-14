@@ -57,7 +57,7 @@ class StreamProcessor:
         obje_diagonal_line = obje.calculate_diagonal_line()
         for obj in list_of_object:
             diagonal_line = obj.calculate_diagonal_line()
-            obj.similar_score = weights[0] * 1 / abs(diagonal_line - obje_diagonal_line) + weights[
+            obj.similar_score = weights[0] * 1 / abs(diagonal_line - obje_diagonal_line+0.001) + weights[
                 1] * obj.similar_score
         list_of_object.sort(key=lambda x: x.similar_score)
         highest_score = -1
