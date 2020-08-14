@@ -12,3 +12,6 @@ class Frame:
         for obj in self.objects:
             if not obj.is_valid():
                 self.objects.remove(obj)
+
+    def add_object(self,new_object):
+        self.objects.append(new_object)

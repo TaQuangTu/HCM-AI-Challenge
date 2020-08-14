@@ -15,10 +15,16 @@ def get_all_images(dir, all):
 
 
 if __name__ == "__main__":
+    processed_files = open("processed_files.txt").readlines()
+    for file in processed_files:
+        file.replace("\n","")
     all_images = []
     get_all_images(".", all_images)
     print("found", len(all_images), " images")
     print(all_images)
     txt_file = open("test_all_images.txt", "w+")
     for image in all_images:
+        if image.replace("../","") in processed_files:
+            print("ignore",image)
+            continue
         txt_file.write("." + image + "\n")
