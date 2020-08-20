@@ -30,6 +30,7 @@ class Object:
         self.width = width
         self.height = height
         self.moving_direction = Direction()
+        self.moved_out = False
 
     def set_class_name(self, class_name):
         self.class_name = class_name
@@ -54,7 +55,7 @@ class Object:
             return False
         return True
 
-    # compare if two objects is one
+    # compare if two objects are similar
     def get_similar_score(self, other_object):
         distance = MathHelper.distanceP2P(Point(self.x_center,self.y_center),Point(other_object.x_center,other_object.y_center))
         return 1/(distance+0.001)

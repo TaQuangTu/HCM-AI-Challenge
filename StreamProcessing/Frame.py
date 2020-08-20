@@ -2,7 +2,9 @@ from .Object import Object
 
 
 class Frame:
-    def __init__(self):
+    def __init__(self, video_name="0", frame_id=-1):
+        self.video_name = video_name
+        self.frame_id = frame_id
         self.objects = []  # storage list of objects
 
     def has_objects(self):
@@ -13,5 +15,5 @@ class Frame:
             if not obj.is_valid():
                 self.objects.remove(obj)
 
-    def add_object(self,new_object):
+    def add_object(self, new_object):
         self.objects.append(new_object)
