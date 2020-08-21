@@ -6,7 +6,7 @@ from StreamProcessing.Point import Point
 
 
 class StreamProcessor:
-    number_of_frames = 25  # correspond to 2.5s
+    number_of_frames = 30  # correspond to 3s
 
     def __init__(self, polygon):
         self.frames = []
@@ -23,7 +23,7 @@ class StreamProcessor:
         movements = []
         for obj in new_frame.objects:
             similar_objects_in_pre_frames = self.get_similar_objects(obj)
-            if MathHelper.is_on_polygon(obj, polygon=self.polygon):
+            if MathHelper.is_on_polygon(obj, polygon=self.polygon) and MathHelper.is_in_polygon(obj,self.polygon):
                 if self.__has_on_polygon_before(similar_objects_in_pre_frames):
                     obj.moved_out = True
                     continue
@@ -68,7 +68,7 @@ class StreamProcessor:
         for obj in list_of_object:
             distance = MathHelper.distanceP2P(Point(obje.x_center, obje.y_center), Point(obj.x_center, obj.y_center))
             if obj.similar_score > highest_score and obj.class_type == obje.class_type and float(
-                    obj.confident_score) > 0.4 and distance < obje_diagonal_line:
+                    obj.confident_score) > 0.3 and distance < obje_diagonal_line:
                 chosen_obj = obj
                 highest_score = obj.similar_score
         return chosen_obj

@@ -19,11 +19,11 @@ def distanceP2P(point1, point2):
 
 
 def is_on_polygon(object, polygon):
-    EPSILON = 6  # sqrt(object.width ** 2 + object.height ** 2) / 2
+    EPSILON = 3 # sqrt(object.width ** 2 + object.height ** 2) / 2
     point = Point(object.x_center, object.y_center)
     for i in range(len(polygon.list_points)):
         a, b = polygon.list_points[i - 1], polygon.list_points[i]
-        if abs(distanceP2P(a, point) + distanceP2P(b, point) - distanceP2P(a, b)) <= EPSILON and distanceP2Line(a,b,Point(object.x_center,object.y_center))<16:
+        if abs(distanceP2P(a, point) + distanceP2P(b, point) - distanceP2P(a, b)) <= EPSILON and is_in_polygon(object,polygon) and distanceP2Line(a,b,Point(object.x_center,object.y_center))<18 :
             return True
     return False
 
