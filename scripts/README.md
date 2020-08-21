@@ -9,3 +9,7 @@ Following are our concise steps:
 
 This repo does not include detection processing, it is for tracking task.
 ###This project is just for my team in the contest, therefore it's not readable for everyone:( 
+
+Update list: 
+- Update 1: By increasing number of batch, from 20 to 30, we got better results in tracking task.
+
